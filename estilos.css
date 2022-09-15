@@ -1,0 +1,103 @@
+.grid-containerlogo305 {
+	background: var(--color_copyright_bg);
+	padding: 0 0 1em 0;
+}
+ .logo305 {
+       display: table;
+       margin: 0 auto 1em;
+ }
+
+.logo305 {
+	display: table;
+	margin: 0 auto 0;
+}
+
+/* Escribir resena */
+.product-template__rating {
+	margin: 0em 0 1.2em;
+}
+
+/****************************
+  ARREGLOS DE CSS
+****************************/
+
+/* CENTRAR TEXTO PRECIOS Y EXTENDER */
+.product-item-price.col-12.col-sm-6.col-md-6.col-lg-6.col-xl-6.col-xxl-6 {
+	width: 100% !important;
+	clear: both;
+	display: flex;
+	justify-content: center;
+}
+.product-item__title {
+	text-align: center;
+}
+
+/* ESPACIO LETRAS MENU */
+.header__inline-menu .header__menu-root .header__menu-item {
+	letter-spacing: 1.025px !important;
+}
+.breadcrumb-nav {
+	font-size: 1.2rem !important;
+	text-transform: uppercase;
+}
+
+/****************************
+  PRODUCTO
+****************************/
+
+/* Botones letra mayusculas */
+.product-form__buttons * {text-transform: uppercase;}
+
+
+
+
+
+
+
+/****************************
+  FOOTER
+****************************/
+.shop-logo a img {
+	width: 100%;
+	max-width: 100px;
+}
+.footerstyle-2 .footer-information-wrapper .row {
+	padding-top: 10px !important;
+	padding-bottom: 10px !important;
+}
+.footer-main-wrapper {padding-bottom: 20px;}
+
+/* MAYUSCULAS */
+.footer__linklist-menu .list-menu__item--link {text-transform: uppercase;}
+
+
+
+
+/****************************
+  ESCRITORIO > 760
+****************************/
+@media (min-width: 760px) {
+
+  
+.grid-containerlogo305 {
+	margin: -42px 0 0 0;
+}
+
+  
+  }
+
+
+
+
+/****************************
+  MOVIL
+****************************/
+
+@media (max-width: 760px) {
+
+/* Oculta 3puntos del menu movil */
+.main-header__right .svg-icon.icon-menu {
+	display: none;
+}
+  
+}
