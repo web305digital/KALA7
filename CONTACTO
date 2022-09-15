@@ -1,0 +1,15 @@
+
+/* FONDO CONTACTO KALA 7 */
+main {
+	clear: both;
+	background: url("https://cdn.shopify.com/s/files/1/0572/7921/7753/files/GZiwMyXJqo_vpaDNqBOXDAlD_dV1oFaz_HCYheC75_IimbLyl9NAxsNuC29Zf3bE8FaQ_Cnkj_P1LwsfmGQr7AlE_hxAjX8XT3lRqa1_ghJZ9xat7811iH2osHTVZppBRtNVlBI9cFoRJ5E0_buhl6lpgYuMhXpdJD_yc_V6MTxt26FwXkYgY5x.jpg?v=1661790248");
+	background-attachment: fixed;
+	background-size: cover;
+	background-blend-mode: saturation;
+	background-color: #ffffffb0;
+}
+.contact-form__container {
+   margin: 0 auto 0px !important;
+  padding-bottom: 3em;
+}
+
