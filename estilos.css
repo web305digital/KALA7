@@ -32,6 +32,11 @@
 	text-align: center;
 }
 
+/* Centra y pone full las estrellas  */
+.product-item__rating {margin: 0 auto;}
+.spr-badge-starrating {text-align: center;}
+
+
 /* ESPACIO LETRAS MENU */
 .header__inline-menu .header__menu-root .header__menu-item {
 	letter-spacing: 1.025px !important;
