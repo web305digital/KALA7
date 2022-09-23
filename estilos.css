@@ -46,6 +46,26 @@
 	text-transform: uppercase;
 }
 
+
+/* CENTRAR Y SUBE, CORRIGE EL ERROR DE BLOQUES CON CAPTION DEBAJO */
+.effect > a:not(.no-effect), .effect .effect-parent:not(.no-effect) {
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+}
+.banner-grid__caption {
+	position: absolute;
+	z-index: 1;
+	display: table;
+	width: 100%;
+}
+.banner-grid__link.banner-grid__caption {
+	display: none !important;
+}
+
+
+
+
 /****************************
   PRODUCTO
 ****************************/
