@@ -64,6 +64,18 @@
 }
 
 
+/* AJUSTA TODAS LAS IMAGENES DE CATALOGO PARA QUE TODAS ESTEN CUADRADAS */
+.collection-template__product-item.col .lazy-bg.product-item__image {
+    padding-bottom: 100% !important;
+}
+
+/* Para bloques del home agregar clase del contendedor al principio como este ejemplo */
+.product-item.product-item__grid .lazy-bg.product-item__image {
+    padding-bottom: 100% !important;
+}
+
+
+
 
 
 /****************************
