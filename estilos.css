@@ -31,6 +31,12 @@
 .product-item__title {
 	text-align: center;
 }
+.product-item-price.col-12.col-sm-6.col-md-6.col-lg-6.col-xl-6.col-xxl-6 {
+    width: 100%;
+}
+.product-item-group.row .price {
+    justify-content: center;
+}
 
 /* Centra y pone full las estrellas  */
 .product-item__rating {margin: 0 auto;}
