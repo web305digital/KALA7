@@ -1,0 +1,375 @@
+<div class="announcement-bar {{ section.settings.display }}">
+  <div class="container">
+    <div class="row">
+      <slider-component class="announcement__slider">
+        <div class="carousel" data-carousel-param='{"loop": "true", "effect": "slide", "autoplay": "{{ section.settings.autoplay }}", "autoplaySpeed": "{{ section.settings.autoplay_speed }}", "space": "0", "col": "1", "col_sm": "1", "col_md": "1", "col_lg": "1", "col_xl": "1", "col_xxl": "1", "row": "1"}' data-carousel>
+          <div class="carousel-wrapper">
+            <div class="swiper-container" data-carousel-container>
+              <div class="swiper-wrapper row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1">
+                {%- for block in section.blocks -%}
+                {% if block.type == 'announcement' %}
+                  <div class="announcement__item swiper-slide col" data-carousel-item>
+                    {{ block.settings.text }}
+                  </div>
+                {% endif %}
+                {%- endfor -%}
+              </div>
+            </div>
+            {%- if section.settings.navigation -%}
+            <div class="carousel-navigation carousel-nav-prev" data-carousel-nav-prev><svg class="svg-icon"><use xlink:href="#arrow-left" /></svg></div>
+            <div class="carousel-navigation carousel-nav-next" data-carousel-nav-next><svg class="svg-icon"><use xlink:href="#arrow-right" /></svg></div>
+            {%- endif -%}
+          </div>
+          {%- if section.settings.pagination -%}
+          <div class="carousel-pagination" data-carousel-pagination></div>
+          {%- endif -%}
+        </div>
+      </slider-component>
+    </div>
+  </div>
+</div>
+
+<div class="main-header header-wrapper--border-bottom" {% if section.settings.header_sticky %}data-sticky='{"stickTo": "body", "stickyClass": "sticky", "mobileFirst": "true", "responsive": {"992": {"disable": true}}}'{% endif %}>
+  <div class="container">
+    <div class="main-header-content">
+      <div class="mobile-header__left d-block d-lg-none">
+        {%- if section.settings.link_list != blank -%}
+          <header-drawer data-breakpoint="tablet">
+            <details class="menu-drawer-container">
+              <summary class="header__icon header__icon--menu header__icon--summary link link--text focus-inset" aria-label="{{ 'sections.header.menu' | t }}">
+                <svg class="svg-icon icon-menu"><use xlink:href="#menu" /></svg>
+                <svg class="svg-icon icon-close"><use xlink:href="#close" /></svg>
+              </summary>
+              <div id="menu-drawer" class="menu-drawer motion-reduce" tabindex="-1">
+                <div class="menu-drawer__inner-container">
+                  <div class="menu-drawer__navigation-container component-scrollbar">
+                    {%- render 'theme-header-menu-mobile', config: section.settings, blocks: section.blocks, menu: linklists[section.settings.link_list] -%}                    
+                  </div>
+                </div>
+              </div>
+            </details>
+          </header-drawer>
+        {%- endif -%}
+        <div class="mobile-header__search">
+          <header-drawer data-breakpoint="tablet">
+            <details class="menu-drawer-container">
+              <summary class="header__icon header__icon--menu header__icon--summary link link--text focus-inset" aria-label="{{ 'general.search.search' | t }}">
+                <svg class="svg-icon icon-magnifier"><use xlink:href="#magnifier" /></svg>
+                <svg class="svg-icon icon-close"><use xlink:href="#close" /></svg>
+              </summary>
+              <div id="search-drawer" class="menu-drawer motion-reduce" tabindex="-1">
+                <div class="search-drawer__content">
+                  <search-form>
+                    {%- liquid 
+                    assign searchUrl = search.terms | split:'product_type:'
+                    assign searchTerms = searchUrl[0] | strip
+                    assign searchType = searchUrl[1] | strip
+                  -%}
+                    <form action="{{ routes.search_url }}" method="get" role="search" class="search__form">
+                      <input type="hidden" name="type" value="product" />
+                      <input type="hidden" name="options[unavailable_products]" value="hide" />
+                      <input type="hidden" name="options[prefix]" value="last" />
+                      {%- if section.settings.search_type and shop.types.size > 0 -%}
+                      {%- unless shop.types[0] == blank and shop.types.size == 1 %}
+                      <div class="search__form-collections">
+                        <select name="product_type">
+                          <option value="*" >{{ 'general.search.all_types' | t }}</option>
+                          {%- for product_type in shop.types -%}
+                          {%- if product_type == blank %}{% continue-%}{% endif -%}
+                          <option value="{{ product_type }}" {% if searchType == product_type %}selected="selected"{% endif %}>
+                            {{ product_type }}
+                          </option>
+                          {%- endfor -%}                       
+                        </select>
+                      </div>
+                      {%- endunless -%}
+                      {%- endif -%}
+                      <input type="text" name="q" class="search_box" placeholder="{{ 'general.search.placeholder' | t }}" value="{{ searchTerms }}"  />
+                      <button class="search_submit" type="submit" aria-label="icon search">
+                        <svg class="svg-icon"><use xlink:href="#magnifier" /></svg>
+                      </button>
+                    </form>
+                    <div class="search__form-results " data-search-autocomplete="{{ section.settings.search_auto }}">
+                    </div>
+                  </search-form>
+                </div>
+              </div>
+            </details>
+          </header-drawer>
+        </div>
+      </div>
+      <div class="desktop-header__left d-none d-lg-block">
+        <div class="desktop-header__left_row">
+        <desktop-header2__search class="desktop-header-search">
+          <a class="display-block searchicon" data-searchicon><svg class="svg-icon"><use xlink:href="#magnifier" /></svg></a>
+          <div class="searchbox-content hidden" data-searchbox>
+            <search-form>
+              {%- liquid 
+                assign searchUrl = search.terms | split:'product_type:'
+                assign searchTerms = searchUrl[0] | strip
+                assign searchType = searchUrl[1] | strip
+              -%}
+              <form action="{{ routes.search_url }}" method="get" role="search" class="search__form">
+                <input type="hidden" name="type" value="product" />
+                <input type="hidden" name="options[unavailable_products]" value="hide" />
+                <input type="hidden" name="options[prefix]" value="last" />
+                <input type="text" name="q" class="search_box desktop_search_box" placeholder="{{ 'general.search.placeholder' | t }}" value="{{ searchTerms }}"  />
+                <button class="search_submit" type="submit" aria-label="icon search">
+                  <svg class="svg-icon"><use xlink:href="#magnifier" /></svg>
+                </button>
+              </form>
+              <div class="search__form-results " data-search-autocomplete="{{ section.settings.search_auto }}">
+              </div>
+            </search-form>
+            <div class="searchbox-close" data-searchbox-close><svg class="svg-icon"><use xlink:href="#close" /></svg></div>
+          </div>
+        </desktop-header2__search>
+        <header-compare class="main-header__compare main-header__icon-item hidden d-none d-md-block">
+          <a href="/pages/compare" class="header__icon-content">
+            <svg class="svg-icon"><use xlink:href="#refresh" /></svg>
+            <div class="header__icon-count">
+              <span aria-hidden="true" class="header__icon-count-bubble">0</span>
+              <span class="visually-hidden">{{ 'compare.title' | t }}</span>
+            </div>
+          </a>
+        </header-compare>
+        {%- if section.settings.show_currency_selector and localization.available_countries.size > 1 -%}
+        <div class="desktop-header__menu-root header__menu-currency">
+          <localization-form>
+            {%- form 'localization', id: 'HeaderCountryForm', class: 'localization-form' -%}
+            <div class="localization-form__content menu__dropdown">
+              <button type="button" class="localization-form__select dropdown-toggle" data-toggle="HeaderCountryList">                    
+                {{ localization.country.currency.iso_code }} {{ localization.country.currency.symbol }}
+                <svg class="svg-icon"><use xlink:href="#arrow-down" /></svg>
+              </button>
+              <ul id="HeaderCountryList" role="list" class="dropdown-menu no-bullet localization-form__list" hidden>
+                {%- for country in localization.available_countries -%}
+                <li class="localization-form__item {% if country.iso_code == localization.country.iso_code %} localization-form__active{% endif %}" tabindex="-1">
+                  <a class="localization-form__link" href="#"{% if country.iso_code == localization.country.iso_code %} aria-current="true"{% endif %} data-value="{{ country.iso_code }}">
+                    {{ country.currency.iso_code }} {{ country.currency.symbol }}
+                  </a>
+                </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+            <input type="hidden" name="country_code" value="{{ localization.country.iso_code }}">
+            {%- endform -%}
+          </localization-form>
+        </div>
+        {%- endif -%}
+        </div>
+      </div>
+      <div class="main-header__logo">
+        {%- if request.page_type == 'index' -%}
+        <h1 class="header__heading">
+          {%- endif -%}
+          <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset">
+            {%- if section.settings.logo != blank or section.settings.logo_mobile != blank -%}
+              {%- if section.settings.logo != blank -%}
+                <img srcset="{% render 'srcset', image: section.settings.logo %}"
+                     class="header__heading-logo d-none d-lg-block"
+                     width="{{ section.settings.logo_width }}"
+                     height="{{ section.settings.logo.height }}"
+                     alt="{{ section.settings.logo.alt | default: shop.name | escape }}"
+                     >
+              {%- endif -%}
+              {%- if section.settings.logo_mobile != blank -%}
+                <img srcset="{% render 'srcset', image: section.settings.logo_mobile %}"
+                     class="header__heading-logo d-block d-lg-none"
+                     width="{{ section.settings.logo_mobile_width }}"
+                     height="{{ section.settings.logo_mobile.height }}"
+                     alt="{{ section.settings.logo_mobile.alt | default: shop.name | escape }}"
+                     >
+              {%- endif -%}
+            {%- else -%}
+              <span class="h2">{{ shop.name }}</span>
+            {%- endif -%}
+          </a>
+          {%- if request.page_type == 'index' -%}
+        </h1>
+        {%- endif -%}
+      </div>
+      <div class="main-header__right">
+        {%- if shop.customer_accounts_enabled -%}
+        <div class="desktop-header__menu-root header__menu-account menu__dropdown d-none d-lg-block">
+          <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="dropdown-toggle top-header__menu-item list-menu__item"{% if link.current %} aria-current="page"{% endif %}>                
+            {%- liquid                 
+                  if customer
+                    echo 'customer.account_fallback' | t
+                  else
+                    echo 'customer.log_in' | t
+                  endif                                    
+                -%} 
+            {%- unless customer -%}
+                <svg class="svg-icon"><use xlink:href="#arrow-down"></use></svg>
+                {%- endunless -%}
+          </a>
+          
+          {%- unless customer -%}
+          <ul class="header__menu-login no-bullet dropdown-menu">
+            <li class="header__menu-login-content">
+              <div class="account-login">
+                {%- form 'customer_login', novalidate: 'novalidate', id:'customer_login_box' -%}
+                {%- if form.errors -%}
+                {{ form.errors | default_errors }}
+                {%- endif -%}
+                <input type="email" name="customer[email]" class="account-field {% if form.errors contains 'email' %} input-error{% endif %}" placeholder="{{ 'customer.login_page.email' | t }}" autocapitalize="off" autocomplete="email">
+                {%- if form.password_needed -%}
+                <input type="password" value="" name="customer[password]" class="account-field {% if form.errors contains 'password' %}  input-error{% endif %}" placeholder="{{ 'customer.login_page.password' | t }}" autocomplete="current-password"/>
+                {%- endif -%}
+                <div class="sign-in_create-account">
+                  <button type="submit" class="button account-login-submit">{{ 'customer.login_page.sign_in' | t }}</button>
+                </div>
+                {%- if form.password_needed -%}
+                <a href="{{ routes.account_login_url }}#recover" class="account-login-recover">> {{'customer.login_page.forgot_password'|t}}</a>
+                {%- endif -%}
+                <a href="{{ routes.account_register_url }}"><span>> {{'customer.login_page.create_account'|t}}</span></a>
+                {%- endform -%}
+              </div>
+            </li>
+          </ul>
+          {%- endunless -%}
+        </div>
+        {%- unless customer -%}
+        <div class="desktop-header__menu-root header__menu-register d-none d-lg-block">
+          <a href="/account/register">{{ 'customer.create_account' |t }}</a>
+        </div>
+        {% endunless %}
+        {%- endif -%}
+        
+        <header-wishlist class="main-header__compare main-header__icon-item hidden d-none d-lg-block">
+          <a href="/pages/wish-list" class="header__icon-content">
+            <svg class="svg-icon"><use xlink:href="#heart" /></svg>
+            <div class="header__icon-count">
+              <span aria-hidden="true" class="header__icon-count-bubble">0</span>
+              <span class="visually-hidden">{{ 'wishlist.title' | t }}</span>
+            </div>
+          </a>
+        </header-wishlist>
+        
+        <div class="main-header__cart menu__dropdown">
+          <a href="{{ routes.cart_url }}" class="header__cart-icon dropdown-toggle" id="cart-icon-bubble" data-cart-icon-bubble>
+            <div class="cart-count-bubble">
+              {%- if cart.item_count < 100 -%}
+              <span aria-hidden="true">{{ cart.item_count }}</span>
+              {%- endif -%}
+              <span class="visually-hidden">{{ 'sections.cart.cart_count' | t: count: cart.item_count }}</span>
+            </div>
+            <div class="main-header__cart-title">
+              <svg class="svg-icon"><use xlink:href="#shopping-cart" /></svg>
+              <span class="main-header__cart-text">{{ 'general.cart.title' | t }}</span>
+            </div>
+          </a>
+          {%- unless template == 'cart' -%}
+          <div class="dropdown-menu header__cart-dropdown component-scrollbar" id="cart-dropdown-bubble">
+            {%- render 'cart-dropdown-bubble' -%}
+          </div>
+          {%- endunless -%}
+        </div>
+        
+        <header-drawer data-breakpoint="tablet" class="d-block d-lg-none">
+          <details class="menu-drawer-container">
+            <summary class="header__icon header__icon--menu header__icon--summary link link--text focus-inset">
+              <svg class="svg-icon icon-menu"><use xlink:href="#options-vertical" /></svg>
+              <svg class="svg-icon icon-close"><use xlink:href="#close" /></svg>
+            </summary>
+            <div id="categorie-drawer" class="menu-drawer motion-reduce" tabindex="-1">
+              <div class="menu-drawer__inner-container">
+                <div class="menu-drawer__navigation-container component-scrollbar">
+                  <nav class="menu-drawer__navigation">
+                    <ul class="menu-drawer__menu list-menu" role="list">
+                      {%- if customer -%}
+                      <li>
+                        <a href="{{ routes.account_url }}" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">
+                          {{ 'customer.account_fallback' | t }}
+                        </a>
+                      </li>
+                      <li>
+                        <a href="{{ routes.account_logout_url }}" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">
+                          {{ 'customer.log_out' | t }}
+                        </a>
+                      </li>
+                      {%- else -%}
+                      <li>
+                        <a href="{{ routes.account_login_url }}" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">
+                          {{ 'customer.log_in' | t }}
+                        </a>
+                      </li>
+                      <li>
+                        <a href="{{ routes.account_register_url }}" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">
+                          {{ 'customer.create_account' | t }}
+                        </a>
+                      </li>
+                      {%- endif -%}
+                      {%- for link in section.settings.more_linklist.links -%}
+                      <li>
+                        <a href="{{ link.url }}" class="menu-drawer__menu-item list-menu__item link link--text focus-inset{% if link.current %} menu-drawer__menu-item--active{% endif %}"{% if link.current %} aria-current="page"{% endif %}>
+                          {{ link.title | escape }}
+                        </a>
+                      </li>
+                      {%- endfor -%}
+                      <li>
+                        <a href="/pages/compare" class="menu-drawer__menu-item list-menu__item">{{ 'compare.title' | t }}</a>
+                      </li>
+                      <li>
+                        <a href="/pages/wish-list" class="menu-drawer__menu-item list-menu__item">{{ 'wishlist.title' | t }}</a>
+                      </li> 
+                    </ul>
+                    <localization-form>
+                      {%- form 'localization', id: 'HeaderCountryFormMobile', class: 'localization-form' -%}
+                      <div class="localization-form__content">
+                        <button type="button" class="localization-form__select dropdown-toggle hidden" data-toggle="HeaderCountryList">
+                          <span class="main-header__icon-span">{{ localization.country.currency.iso_code }} {{ localization.country.currency.symbol }} <svg class="svg-icon"><use xlink:href="#arrow-down" /></svg></span>
+                        </button>
+                        <ul id="HeaderCountryList" role="list" class="no-bullet localization-form__list">
+                          {%- for country in localization.available_countries -%}
+                          <li class="localization-form__item {% if country.iso_code == localization.country.iso_code %} localization-form__active{% endif %}" tabindex="-1">
+                            <a class="localization-form__link" href="#"{% if country.iso_code == localization.country.iso_code %} aria-current="true"{% endif %} data-value="{{ country.iso_code }}">
+                              {{ country.currency.iso_code }} {{ country.currency.symbol }}
+                            </a>
+                          </li>
+                          {%- endfor -%}
+                        </ul>
+                      </div>
+                      <input type="hidden" name="country_code" value="{{ localization.country.iso_code }}">
+                      {%- endform -%}
+                    </localization-form>
+                  </nav>
+                </div>
+              </div>
+            </div>
+          </details>
+        </header-drawer>
+      </div>
+    </div>
+  </div>  
+</div>
+
+<div class="navigation-header d-none d-lg-block" {% if section.settings.header_sticky %}data-sticky='{"stickTo": "body", "stickyClass": "sticky", "responsive": {"991": {"disable": true}}}'{% endif %}>
+  <div class="container">
+    <div class="navigation-header-content">
+      {%- if section.settings.header_categorie -%}
+        <div class="navigation-header__categorie">
+          <div class="header__categorie-content menu__dropdown">
+            <a href="{{ section.settings.categorie_link }}" class="header__categorie-title dropdown-toggle">
+              {{ section.settings.categorie_title }}
+              {% render 'icon-hamburger' %}
+            </a>
+            {%- if section.settings.categorie_link_list != blank -%}
+              <div class="dropdown-menu header__categorie-dropdown">
+                {%- render 'theme-header-categorie', config: section.settings, blocks: section.blocks, menu: linklists[section.settings.categorie_link_list] -%}
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endif -%}
+      {%- if section.settings.link_list != blank -%}
+        <div class="navigation-header__menu">
+          {%- render 'theme-header-menu', config: section.settings, blocks: section.blocks, menu: linklists[section.settings.link_list] -%}
+        </div>
+      {%- endif -%}
+      <div class="navigation-header__icon" id="navigation-header-icon">
+      </div>
+    </div>
+  </div>
+</div>
