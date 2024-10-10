@@ -80,7 +80,28 @@
     padding-bottom: 100% !important;
 }
 
+/* Ajusta inicio sesion */
+.headerstyle-4 .main-header__right {
+	width: 250px;
+}
+.top-header__menu-content.list-menu--inline.no-bullet.clearfix * {
+	font-size: 11px;
+}
 
+/* Oculta texto reseña */
+.product-template__rating {
+	display: none !important;
+}
+/* Popup - otros clientes tambien compraron */
+.cart-modal__upsell.d-none.d-md-block {
+	display: none !important;
+}
+
+/* QUE LOS TITULOS DE PRODUCT NO SE CORTEN */
+.product-item__grid .product-item__title {
+	white-space: wrap !important;
+
+}
 
 
 
